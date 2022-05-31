@@ -32,6 +32,12 @@ class Board {
     });
   }
 
+  fill() {
+    for (let y = 0; y < this.height; y++) {
+      for (let x = 0; x < this.width; x++) this.board[y][x] = 1;
+    }
+  }
+
   mergeTShape(tshape) {
     tshape.shape.forEach((row, y) => {
       row.forEach((value, x) => {

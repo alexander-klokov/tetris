@@ -151,7 +151,9 @@ const TetrisLib = {
   gameOver() {
     cancelAnimationFrame(this.requestId);
     this.isGameRunning = false;
-    this.tshape.color = "red";
+
+    this.tshape.color = "gray";
+    this.board.fill();
     this.refreshBoard();
   },
 
