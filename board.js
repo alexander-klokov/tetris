@@ -31,8 +31,19 @@ class Board {
   mergeTShape(tshape) {
     tshape.shape.forEach((row, y) => {
         row.forEach((value, x) => {
-            if (value) this.board[y + tshape.y][x + tshape.x] = value;
+            if (value) this.board[y + tshape.y][x + tshape.x] = 1;
         })
     })
   }
+
+  clearLines() {
+    let lines = 0;
+    this.board.forEach((row, y) => {
+        if (row.every(value => value > 0)) {
+            lines++;
+            this.board.splice(y, 1);
+            this.board.unshift(Array(10).fill(0));
+        }
+    })
+};
 }
