@@ -123,7 +123,6 @@ rotate(tscopy) {
 
     // check if reached the bottom
     if (this.isReachedBottom() || this.isReachedMerged()) {
-      console.log('BOTTOM or Merged')
       this.board.mergeTShape(this.tshape);
       this.tshape = new TShape (this.ctx);
     }
