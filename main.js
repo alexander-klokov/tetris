@@ -13,5 +13,5 @@ ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
 TetrisLib.setup(ctx);
 
 const onStart = () => {
-    TetrisLib.refreshBoard();
+    TetrisLib.start();
 }

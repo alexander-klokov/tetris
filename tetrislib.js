@@ -3,6 +3,7 @@ const TetrisLib = {
   ctx: null,
   board: null,
   tshape: null,
+  timeStart: null,
 
   setup(ctx) {
     this.ctx = ctx;
@@ -101,6 +102,22 @@ rotate(tscopy) {
     }
 
     return false;
+  },
+
+  run(timeNow = 0) {
+
+    const timeElapsed = timeNow - this.timeStart;
+
+    if (timeElapsed > 1000) this.board.moveDown();
+    this.refreshBoard();
+    
+    this.requestId = requestAnimationFrame(this.run.bind(this));
+  },
+
+  start() {
+    this.refreshBoard();
+    this.timeStart = performance.now();
+    requestAnimationFrame(this.run.bind(this));
   },
 
 
