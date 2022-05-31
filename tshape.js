@@ -1,5 +1,7 @@
 class TShape {
     constructor(ctx) {
+        console.log('construcgor', ctx)
+
         this.ctx = ctx;
 
         this.color = 'blue';

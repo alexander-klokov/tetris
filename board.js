@@ -4,8 +4,9 @@ class Board {
 
     this.width = 10;
     this.height = 10;
-  }
 
+    this.init();
+  }
 
   init() {
     this.board = [];
@@ -19,5 +20,19 @@ class Board {
   draw() {
     const { width, height } = ctx.canvas;
     ctx.clearRect(0, 0, width, height);
+
+    this.board.forEach((row, y) => {
+        row.forEach((value, x) => {
+            if (value > 0) this.ctx.fillRect(x, y, 1, 1);
+        });
+    });
+  }
+
+  mergeTShape(tshape) {
+    tshape.shape.forEach((row, y) => {
+        row.forEach((value, x) => {
+            if (value) this.board[y + tshape.y][x + tshape.x] = value;
+        })
+    })
   }
 }

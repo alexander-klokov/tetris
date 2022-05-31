@@ -5,6 +5,7 @@ const TetrisLib = {
   tshape: null,
 
   setup(ctx) {
+    this.ctx = ctx;
     this.board = new Board(ctx);
     this.tshape = new TShape (ctx);
 
@@ -56,6 +57,21 @@ const TetrisLib = {
     return tsCopy;
   },
 
+  isReachedBottom() {
+    console.log('is reached', this.tshape.shape)
+
+    for (let jr = 0; jr < this.tshape.shape.length; ++jr) {
+      const row = this.tshape.shape[jr];
+      for (let jc = 0; jc < row.length; ++jc) {
+        const value = this.tshape.shape[jr][jc];
+        if (value && this.tshape.y + jr === this.board.height - 1) return true;
+      }
+    }
+
+    return false;
+  },
+
+
   onKeydown(event) {
 
     event.preventDefault();
@@ -69,11 +85,18 @@ const TetrisLib = {
     var key = keycodeToKey[event.which];
 
     const tshapeMoved = this.moveTShape(key);
-
     this.tshape.x = tshapeMoved.x;
     this.tshape.y = tshapeMoved.y;
 
+    // check if reached the bottom
+    if (this.isReachedBottom()) {
+      console.log('BOTTOM')
+      this.board.mergeTShape(this.tshape);
+      this.tshape = new TShape (this.ctx);
+    }
+
     this.refreshBoard();
+
     if (key && this.onKeydownListener)
       this.onKeydownListener(key);
   }
