@@ -4,11 +4,14 @@ const TetrisLib = {
   board: null,
   tshape: null,
   timeStart: null,
+  level: null,
 
   setup(ctx) {
     this.ctx = ctx;
     this.board = new Board(ctx);
     this.tshape = new TShape (ctx);
+
+    this.level = 1000; // ms
 
     document.addEventListener("keydown", this.onKeydown.bind(this), false);
   },
@@ -54,6 +57,14 @@ rotate(tscopy) {
   tsCopyTransposed.forEach(row => row.reverse());
   return tsCopyTransposed;
 },
+
+  moveDown() {
+    this.tshape.y += 1;
+    if (this.isReachedBottom() || this.isReachedMerged()) {
+      this.board.mergeTShape(this.tshape);
+      this.tshape = new TShape (this.ctx);
+    }
+  },
 
   moveTShape(key) {
 
@@ -108,7 +119,11 @@ rotate(tscopy) {
 
     const timeElapsed = timeNow - this.timeStart;
 
-    if (timeElapsed > 1000) this.board.moveDown();
+    if (timeElapsed > this.level) {
+      this.timeStart = timeNow;
+      this.moveDown();
+    }
+   
     this.refreshBoard();
     
     this.requestId = requestAnimationFrame(this.run.bind(this));
