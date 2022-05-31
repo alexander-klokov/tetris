@@ -1,9 +1,13 @@
+const getElementId = () => Math.floor(Math.random()*TSHAPES.length);
+
 class TShape {
     constructor(ctx) {
         this.ctx = ctx;
 
-        this.color = 'blue';
-        this.shape = [[0, 2, 0], [2, 2, 2], [0, 0, 0]];
+        const elementId = getElementId();
+
+        this.color = COLORS[elementId];
+        this.shape = TSHAPES[elementId];
 
         this.x = BOARD_WIDTH / 2;
         this.y = 0;

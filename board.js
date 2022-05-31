@@ -24,7 +24,10 @@ class Board {
 
     this.board.forEach((row, y) => {
       row.forEach((value, x) => {
-        if (value > 0) this.ctx.fillRect(x, y, 1, 1);
+        if (value > 0) {
+          this.ctx.fillStyle = 'gray';
+          this.ctx.fillRect(x, y, 1, 1);
+        }
       });
     });
   }
