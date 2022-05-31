@@ -8,7 +8,7 @@ class TShape {
         this.shape = [[0, 2, 0], [2, 2, 2], [0, 0, 0]];
 
         this.x = 4;
-        this.y = 0;
+        this.y = 1;
     }
 
     draw() {

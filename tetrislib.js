@@ -17,6 +17,10 @@ const TetrisLib = {
     this.tshape.draw();
   },
 
+  transposeTShape(tshape) {
+    return tshape[0].map((_, colIndex) => tshape.map(row => row[colIndex]));
+  },
+
   /*
    * Adds a listener for keydown events for the 4 arrow keys.
    * - listener: a function which gets called with the key that was pressed. The
@@ -38,9 +42,16 @@ const TetrisLib = {
         return row.every((value, dx) => {
             const x = tsCopy.x + dx;
             const y = tsCopy.y + dy;
+            if (!value) return true;
             return this.isInsideBoard(tsCopy.x + dx, tsCopy.y + dy)
         })
     })
+},
+
+rotate(tscopy) {
+  const tsCopyTransposed = this.transposeTShape(tscopy);
+  tsCopyTransposed.forEach(row => row.reverse());
+  return tsCopyTransposed;
 },
 
   moveTShape(key) {
@@ -54,6 +65,7 @@ const TetrisLib = {
       }
       case 'right': { tsCopy.x += 1; break;}
       case 'down': { tsCopy.y += 1; break;}
+      case 'up': {tsCopy.shape = this.rotate(tsCopy.shape)}
     }
 
     // check if tshape transformed is valid
@@ -107,6 +119,7 @@ const TetrisLib = {
     const tshapeMoved = this.moveTShape(key);
     this.tshape.x = tshapeMoved.x;
     this.tshape.y = tshapeMoved.y;
+    this.tshape.shape = tshapeMoved.shape;
 
     // check if reached the bottom
     if (this.isReachedBottom() || this.isReachedMerged()) {
