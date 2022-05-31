@@ -1,5 +1,4 @@
 const TetrisLib = {
-
   ctx: null,
   board: null,
   tshape: null,
@@ -9,7 +8,7 @@ const TetrisLib = {
   setup(ctx) {
     this.ctx = ctx;
     this.board = new Board(ctx);
-    this.tshape = new TShape (ctx);
+    this.tshape = new TShape(ctx);
 
     this.level = 1000; // ms
 
@@ -22,7 +21,7 @@ const TetrisLib = {
   },
 
   transposeTShape(tshape) {
-    return tshape[0].map((_, colIndex) => tshape.map(row => row[colIndex]));
+    return tshape[0].map((_, colIndex) => tshape.map((row) => row[colIndex]));
   },
 
   /*
@@ -30,54 +29,63 @@ const TetrisLib = {
    * - listener: a function which gets called with the key that was pressed. The
    *   key will be one of "left", "up", "down", "right".
    */
-  addKeydownListener: function(listener) { this.onKeydownListener = listener; },
-
-  isInsideBoard(x,y) {
-    return x >= 0 && x < this.board.width && y <= this.board.height
+  addKeydownListener: function (listener) {
+    this.onKeydownListener = listener;
   },
 
-  isMerged(x,y) {
-    console.log('is merged', this.board.board[y] && this.board.board[y][x])
+  isInsideBoard(x, y) {
+    return x >= 0 && x < this.board.width && y <= this.board.height;
+  },
+
+  isMerged(x, y) {
     return this.board.board[y] && this.board.board[y][x];
   },
 
   isMoveValid(tsCopy) {
     return tsCopy.shape.every((row, dy) => {
-        return row.every((value, dx) => {
-            const x = tsCopy.x + dx;
-            const y = tsCopy.y + dy;
-            if (!value) return true;
-            return this.isInsideBoard(tsCopy.x + dx, tsCopy.y + dy)
-        })
-    })
-},
+      return row.every((value, dx) => {
+        const x = tsCopy.x + dx;
+        const y = tsCopy.y + dy;
+        if (!value) return true;
+        return this.isInsideBoard(tsCopy.x + dx, tsCopy.y + dy);
+      });
+    });
+  },
 
-rotate(tscopy) {
-  const tsCopyTransposed = this.transposeTShape(tscopy);
-  tsCopyTransposed.forEach(row => row.reverse());
-  return tsCopyTransposed;
-},
+  rotate(tscopy) {
+    const tsCopyTransposed = this.transposeTShape(tscopy);
+    tsCopyTransposed.forEach((row) => row.reverse());
+    return tsCopyTransposed;
+  },
 
   moveDown() {
     this.tshape.y += 1;
     if (this.isReachedBottom() || this.isReachedMerged()) {
       this.board.mergeTShape(this.tshape);
-      this.tshape = new TShape (this.ctx);
+      this.tshape = new TShape(this.ctx);
     }
   },
 
   moveTShape(key) {
-
     const tsCopy = JSON.parse(JSON.stringify(this.tshape));
 
     // transform the copy
     switch (key) {
-      case 'left': {
-        tsCopy.x -= 1; break;
+      case "left": {
+        tsCopy.x -= 1;
+        break;
       }
-      case 'right': { tsCopy.x += 1; break;}
-      case 'down': { tsCopy.y += 1; break;}
-      case 'up': {tsCopy.shape = this.rotate(tsCopy.shape)}
+      case "right": {
+        tsCopy.x += 1;
+        break;
+      }
+      case "down": {
+        tsCopy.y += 1;
+        break;
+      }
+      case "up": {
+        tsCopy.shape = this.rotate(tsCopy.shape);
+      }
     }
 
     // check if tshape transformed is valid
@@ -106,7 +114,10 @@ rotate(tscopy) {
       for (let jc = 0; jc < row.length; ++jc) {
         const value = this.tshape.shape[jr][jc];
         if (!value) continue;
-        if (this.board.board[y + jr + 1] && this.board.board[y + jr + 1][jc + x]) {
+        if (
+          this.board.board[y + jr + 1] &&
+          this.board.board[y + jr + 1][jc + x]
+        ) {
           return true;
         }
       }
@@ -116,16 +127,15 @@ rotate(tscopy) {
   },
 
   run(timeNow = 0) {
-
     const timeElapsed = timeNow - this.timeStart;
 
     if (timeElapsed > this.level) {
       this.timeStart = timeNow;
       this.moveDown();
     }
-   
+
     this.refreshBoard();
-    
+
     this.requestId = requestAnimationFrame(this.run.bind(this));
   },
 
@@ -135,16 +145,20 @@ rotate(tscopy) {
     requestAnimationFrame(this.run.bind(this));
   },
 
+  gameOver() {
+    cancelAnimationFrame(this.requestId);
+    this.tshape.color = "red";
+    this.refreshBoard();
+  },
 
   onKeydown(event) {
-
     event.preventDefault();
 
     var keycodeToKey = {
       37: "left",
       38: "up",
       39: "right",
-      40: "down"
+      40: "down",
     };
     var key = keycodeToKey[event.which];
 
@@ -156,13 +170,13 @@ rotate(tscopy) {
     // check if reached the bottom
     if (this.isReachedBottom() || this.isReachedMerged()) {
       this.board.mergeTShape(this.tshape);
-      this.tshape = new TShape (this.ctx);
+      this.tshape = new TShape(this.ctx);
+      // check if game over
+      if (this.isReachedMerged()) this.gameOver();
     }
 
     this.refreshBoard();
 
-    if (key && this.onKeydownListener)
-      this.onKeydownListener(key);
-  }
+    if (key && this.onKeydownListener) this.onKeydownListener(key);
+  },
 };
-
