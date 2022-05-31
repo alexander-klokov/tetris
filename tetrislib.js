@@ -3,8 +3,9 @@ const TetrisLib = {
   boardHeight: 10,
   // The board is represented as an array of arrays, with 10 rows and 10 columns.
   board: null,
+  tshape: null,
 
-  setup() {
+  setup(ctx) {
     this.board = [];
     for (var y = 0; y < this.boardHeight; y++) {
       this.board[y] = [];
@@ -12,33 +13,14 @@ const TetrisLib = {
         this.board[y][x] = 0;
     }
 
+    // init t-shape
+    this.tshape = new TShape (ctx);
+
     document.addEventListener("keydown", this.onKeydown.bind(this), false);
   },
 
-  drawBoard: function() { this.drawBoardUsingConsole(); },
-
-  /*
-   * This function is provided only for reference. Write your own function to
-   * draw the board in the browser with a graphical UI.
-   */
-  drawBoardUsingConsole: function() {
-    console.log("Draw the board in the browser, not here!");
-    var output = "", x, y;
-    for (x = 0; x < this.boardWidth + 2; x++)
-      output += "-";
-    output += "\n";
-
-    for (y = 0; y < this.boardHeight; y++) {
-      output += "|";
-      for (x = 0; x < this.boardWidth; x++)
-        output += (this.board[y][x] == 0 ? " " : "#");
-      output += "|\n";
-    }
-
-    for (x = 0; x < this.boardWidth + 2; x++)
-      output += "-";
-
-    console.log(output);
+  drawBoard() {
+    console.log('draw board')
   },
 
   /*
