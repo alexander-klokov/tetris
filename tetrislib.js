@@ -60,6 +60,8 @@ const TetrisLib = {
     if (this.isReachedBottom() || this.isReachedMerged()) {
       this.board.mergeTShape(this.tshape);
       this.tshape = new TShape(this.ctx);
+      // check if game over
+      if (this.isReachedMergedBottom()) this.gameOver();
     }
   },
 
