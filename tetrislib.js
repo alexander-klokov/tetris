@@ -1,10 +1,10 @@
-TetrisLib = {
+const TetrisLib = {
   boardWidth: 10,
   boardHeight: 10,
   // The board is represented as an array of arrays, with 10 rows and 10 columns.
   board: null,
 
-  setup: function() {
+  setup() {
     this.board = [];
     for (var y = 0; y < this.boardHeight; y++) {
       this.board[y] = [];

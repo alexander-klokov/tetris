@@ -1,0 +1,37 @@
+.grid {
+    display: grid;
+    grid-template-columns: 300px 320px 200px;
+}
+
+.left-column {
+    display: flex;
+    flex-direction: column;
+    margin-left: 20px;
+}
+
+.right-column {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.ltetris-board {
+    border: solid 2px;
+    border-radius: 5px;
+}
+
+.play-button {
+    background-color:lightblue;
+    font-size: 16px;
+    padding: 15px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.stop-button {
+    background-color:lightcoral;
+    font-size: 16px;
+    padding: 15px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
