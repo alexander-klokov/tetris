@@ -1,35 +1,18 @@
 const TetrisLib = {
 
   ctx: null,
-
-  boardWidth: 10,
-  boardHeight: 10,
-
-  // The board is represented as an array of arrays, with 10 rows and 10 columns.
   board: null,
   tshape: null,
 
-
   setup(ctx) {
-    this.board = [];
-    this.ctx = [];
-    for (var y = 0; y < this.boardHeight; y++) {
-      this.board[y] = [];
-      for (var x = 0; x < this.boardWidth; x++)
-        this.board[y][x] = 0;
-    }
-
-    // init t-shape
+    this.board = new Board(ctx);
     this.tshape = new TShape (ctx);
 
     document.addEventListener("keydown", this.onKeydown.bind(this), false);
   },
 
-  drawBoard() {
-    console.log('draw board')
-    const { width, height } = ctx.canvas;
-    ctx.clearRect (0, 0, width, height);
-
+  refreshBoard() {
+    this.board.draw();
     this.tshape.draw();
   },
 
@@ -40,12 +23,29 @@ const TetrisLib = {
    */
   addKeydownListener: function(listener) { this.onKeydownListener = listener; },
 
-  refreshBoard() {
-    this.drawBoard();
-    this.tshape.draw();
+  isInsideWalls(x,y) {
+    return x >= 0 && x < this.boardWidth && y < this.boardHeight
   },
 
+  isNotOccupied(x,y) {
+    return this.grid[y] && this.grid[y][x] === 0;
+  },
+
+  valid() {
+    return this.tshape.every((row, dy) => {
+        return row.every((value, dx) => {
+            const x = this.tshape.x + dx;
+            const y = this.tshape.y + dy;
+            return value === 0 || 
+                (this.isInsideWalls(this.tshape.x + dx, this.tshape.y + dy) && this.isNotOccupied(x,y)); 
+        })
+    })
+},
+
   onKeydown(event) {
+
+    event.preventDefault();
+
     var keycodeToKey = {
       37: "left",
       38: "up",

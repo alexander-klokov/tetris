@@ -4,8 +4,8 @@ const ctx = canvas.getContext('2d');
 
 const BLOCK_SIZE = 30;
 
-ctx.canvas.width = TetrisLib.boardWidth * BLOCK_SIZE;
-ctx.canvas.height = TetrisLib.boardHeight * BLOCK_SIZE;
+ctx.canvas.width = 10 * BLOCK_SIZE;
+ctx.canvas.height = 10 * BLOCK_SIZE;
 
 ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
 
@@ -13,8 +13,5 @@ ctx.scale(BLOCK_SIZE, BLOCK_SIZE);
 TetrisLib.setup(ctx);
 
 const onStart = () => {
-    console.log('on start')
-
-    TetrisLib.drawBoard();
-    TetrisLib.tshape.draw();
+    TetrisLib.refreshBoard();
 }

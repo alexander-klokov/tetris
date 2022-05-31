@@ -22,5 +22,5 @@ class TShape {
         this.x = p.x;
         this.y = p.y;
         this.shape = p.shape;
-    }
+    };
 };
