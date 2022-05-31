@@ -23,24 +23,40 @@ const TetrisLib = {
    */
   addKeydownListener: function(listener) { this.onKeydownListener = listener; },
 
-  isInsideWalls(x,y) {
-    return x >= 0 && x < this.boardWidth && y < this.boardHeight
+  isInsideBoard(x,y) {
+    return x >= 0 && x < this.board.width && y < this.board.height
   },
 
-  isNotOccupied(x,y) {
-    return this.grid[y] && this.grid[y][x] === 0;
-  },
-
-  valid() {
-    return this.tshape.every((row, dy) => {
+  isMoveValid(tsCopy) {
+    return tsCopy.shape.every((row, dy) => {
         return row.every((value, dx) => {
-            const x = this.tshape.x + dx;
-            const y = this.tshape.y + dy;
-            return value === 0 || 
-                (this.isInsideWalls(this.tshape.x + dx, this.tshape.y + dy) && this.isNotOccupied(x,y)); 
+            const x = tsCopy.x + dx;
+            const y = tsCopy.y + dy;
+            return this.isInsideBoard(tsCopy.x + dx, tsCopy.y + dy); 
         })
     })
 },
+
+  moveTShape(key) {
+
+    const tsCopy = JSON.parse(JSON.stringify(this.tshape));
+
+    // transform the copy
+    switch (key) {
+      case 'left': {
+        tsCopy.x -= 1; break;
+      }
+      case 'right': {
+        tsCopy.x += 1;
+        break;
+      }
+    }
+
+    // check if tshape transformed is valid
+    if (!this.isMoveValid(tsCopy)) return this.tshape;
+
+    return tsCopy;
+  },
 
   onKeydown(event) {
 
@@ -54,15 +70,10 @@ const TetrisLib = {
     };
     var key = keycodeToKey[event.which];
 
-    switch (key) {
-      case 'left': {
-        this.tshape.x -= 1; break;
-      }
-      case 'right': {
-        this.tshape.x += 1;
-        break;
-      }
-    }
+    const tshapeMoved = this.moveTShape(key);
+
+    this.tshape.x = tshapeMoved.x;
+    this.tshape.y = tshapeMoved.y;
 
     this.refreshBoard();
     if (key && this.onKeydownListener)
