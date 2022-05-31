@@ -2,8 +2,10 @@ class Board {
   constructor(ctx) {
     this.ctx = ctx;
 
-    this.width = 10;
-    this.height = 10;
+    this.width = BOARD_WIDTH;
+    this.height = BOARD_HEIGHT;
+
+    this.board = null;
 
     this.init();
   }

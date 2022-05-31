@@ -4,13 +4,14 @@ const TetrisLib = {
   tshape: null,
   timeStart: null,
   level: null,
+  isGameRunning: false,
 
   setup(ctx) {
     this.ctx = ctx;
     this.board = new Board(ctx);
     this.tshape = new TShape(ctx);
 
-    this.level = 1000; // ms
+    this.level = LEVEL; // ms
 
     document.addEventListener("keydown", this.onKeydown.bind(this), false);
   },
@@ -140,18 +141,27 @@ const TetrisLib = {
   },
 
   start() {
+    this.isGameRunning = true;
+
+    this.board.init();
+    this.tshape.init();
+
     this.refreshBoard();
+
     this.timeStart = performance.now();
     requestAnimationFrame(this.run.bind(this));
   },
 
   gameOver() {
     cancelAnimationFrame(this.requestId);
+    this.isGameRunning = false;
     this.tshape.color = "red";
     this.refreshBoard();
   },
 
   onKeydown(event) {
+    if (!this.isGameRunning) return;
+
     event.preventDefault();
 
     var keycodeToKey = {

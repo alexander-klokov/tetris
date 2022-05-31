@@ -5,8 +5,12 @@ class TShape {
         this.color = 'blue';
         this.shape = [[0, 2, 0], [2, 2, 2], [0, 0, 0]];
 
-        this.x = 4;
+        this.x = BOARD_WIDTH / 2;
         this.y = 0;
+    }
+
+    init() {
+        this.color = 'blue';
     }
 
     draw() {
@@ -16,11 +20,5 @@ class TShape {
                 if (value > 0) this.ctx.fillRect(this.x + x, this.y + y, 1, 1);
             });
         });
-    };
-
-    move(p) {
-        this.x = p.x;
-        this.y = p.y;
-        this.shape = p.shape;
     };
 };
