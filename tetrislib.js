@@ -38,10 +38,6 @@ const TetrisLib = {
     return x >= 0 && x < this.board.width && y <= this.board.height;
   },
 
-  isMerged(x, y) {
-    return this.board.board[y] && this.board.board[y][x];
-  },
-
   isMoveValid(tsCopy) {
     return tsCopy.shape.every((row, dy) => {
       return row.every((value, dx) => {
