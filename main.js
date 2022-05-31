@@ -15,9 +15,6 @@ TetrisLib.setup(ctx);
 const onStart = () => {
     console.log('on start')
 
-    const { width, height } = ctx.canvas;
-    ctx.clearRect (0, 0, width, height);
-
     TetrisLib.drawBoard();
     TetrisLib.tshape.draw();
 }
