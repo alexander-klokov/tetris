@@ -24,7 +24,7 @@ const TetrisLib = {
   addKeydownListener: function(listener) { this.onKeydownListener = listener; },
 
   isInsideBoard(x,y) {
-    return x >= 0 && x < this.board.width && y < this.board.height
+    return x >= 0 && x < this.board.width && y <= this.board.height
   },
 
   isMoveValid(tsCopy) {
@@ -46,10 +46,8 @@ const TetrisLib = {
       case 'left': {
         tsCopy.x -= 1; break;
       }
-      case 'right': {
-        tsCopy.x += 1;
-        break;
-      }
+      case 'right': { tsCopy.x += 1; break;}
+      case 'down': { tsCopy.y += 1; break;}
     }
 
     // check if tshape transformed is valid
