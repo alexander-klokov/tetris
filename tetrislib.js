@@ -28,12 +28,17 @@ const TetrisLib = {
     return x >= 0 && x < this.board.width && y <= this.board.height
   },
 
+  isMerged(x,y) {
+    console.log('is merged', this.board.board[y] && this.board.board[y][x])
+    return this.board.board[y] && this.board.board[y][x];
+  },
+
   isMoveValid(tsCopy) {
     return tsCopy.shape.every((row, dy) => {
         return row.every((value, dx) => {
             const x = tsCopy.x + dx;
             const y = tsCopy.y + dy;
-            return this.isInsideBoard(tsCopy.x + dx, tsCopy.y + dy); 
+            return this.isInsideBoard(tsCopy.x + dx, tsCopy.y + dy)
         })
     })
 },
@@ -58,13 +63,28 @@ const TetrisLib = {
   },
 
   isReachedBottom() {
-    console.log('is reached', this.tshape.shape)
-
     for (let jr = 0; jr < this.tshape.shape.length; ++jr) {
       const row = this.tshape.shape[jr];
       for (let jc = 0; jc < row.length; ++jc) {
         const value = this.tshape.shape[jr][jc];
         if (value && this.tshape.y + jr === this.board.height - 1) return true;
+      }
+    }
+
+    return false;
+  },
+
+  isReachedMerged() {
+    const x = this.tshape.x;
+    const y = this.tshape.y;
+    for (let jr = 0; jr < this.tshape.shape.length; ++jr) {
+      const row = this.tshape.shape[jr];
+      for (let jc = 0; jc < row.length; ++jc) {
+        const value = this.tshape.shape[jr][jc];
+        if (!value) continue;
+        if (this.board.board[y + jr + 1] && this.board.board[y + jr + 1][jc + x]) {
+          return true;
+        }
       }
     }
 
@@ -89,8 +109,8 @@ const TetrisLib = {
     this.tshape.y = tshapeMoved.y;
 
     // check if reached the bottom
-    if (this.isReachedBottom()) {
-      console.log('BOTTOM')
+    if (this.isReachedBottom() || this.isReachedMerged()) {
+      console.log('BOTTOM or Merged')
       this.board.mergeTShape(this.tshape);
       this.tshape = new TShape (this.ctx);
     }
